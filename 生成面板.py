@@ -21,5 +21,5 @@ df = pd.DataFrame(data)
 # 显示生成的数据
 print(df)
 
-# 导出为Stata格式，并指定编码为utf-8
-df.to_excel("/Users/zhuyenan/Downloads/panel_data.xlsx")
+# 将文件保存到当前工作目录
+df.to_excel("./panel_data.xlsx")
