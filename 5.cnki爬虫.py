@@ -48,7 +48,7 @@ for additional_info in additional_info_list:
     ]
 
     # 创建Chrome WebDriver
-    driver = webdriver.Chrome(r'E:/python/selenium/webdriver/chromedriver.exe')
+    driver = webdriver.Chrome(r'/workspaces/stata/chromedriver.exe')
 
     # 访问指定的URL
     driver.get(url)
