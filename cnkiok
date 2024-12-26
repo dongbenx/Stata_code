@@ -32,7 +32,9 @@ driver.find_element(By.XPATH, "//li/a[text()='精确']").click()
 driver.find_element(By.XPATH, '//*[@id="root"]/div[2]/div[1]/div/div[1]/div[1]/div[3]/div[1]/div').click()
 driver.find_element(By.XPATH, "//li/a[text()='2011']").click()
 driver.find_element(By.XPATH, '//*[@id="root"]/div[2]/div[1]/div/div[1]/div[1]/div[3]/div[2]/div').click()
-driver.find_element(By.XPATH, '//*[@id="root"]/div[2]/div[1]/div/div[1]/div[1]/div[3]/div[2]/ul/li[74]/a').click()
+driver.find_element(By.XPATH, '//*[@id="root"]/div[2]/div[1]/div/div[1]/div[1]/div[3]/div[2]/ul/li[76]/a').click()
+#li[76]=2023
+
 
 # 点击获取内容按钮
 driver.find_element(By.XPATH, '//*[@id="root"]/div[2]/div[1]/div/div[1]/div[2]/span/span[3]').click()
