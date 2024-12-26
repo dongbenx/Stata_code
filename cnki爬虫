@@ -2,25 +2,25 @@ from time import sleep
 import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.firefox.service import Service
-from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-# 设置 geckodriver 路径和目标网址
-geckodriver_path = '/Users/zhuyenan/Documents/python/geckodriver'
+# 设置 chromedriver 路径和目标网址
+chromedriver_path = '/Users/zhuyenan/Documents/python/chromedriver'
 url = 'https://data.cnki.net/valueSearch/index?ky=人均GDP指数'
 
 # 设置城市列表
 cities = ['北京市', '天津市']
 
-# 配置 Firefox 浏览器选项
+# 配置 Chrome 浏览器选项
 options = Options()
 options.headless = False  # 设置为 True 可启用无头模式（即不显示浏览器界面）
-service = Service(geckodriver_path)
+service = Service(chromedriver_path)
 
-# 创建 Firefox WebDriver 实例
-driver = webdriver.Firefox(service=service, options=options)
+# 创建 Chrome WebDriver 实例
+driver = webdriver.Chrome(service=service, options=options)
 
 # 访问目标网址
 driver.get(url)
@@ -34,7 +34,6 @@ driver.find_element(By.XPATH, "//li/a[text()='2011']").click()
 driver.find_element(By.XPATH, '//*[@id="root"]/div[2]/div[1]/div/div[1]/div[1]/div[3]/div[2]/div').click()
 driver.find_element(By.XPATH, '//*[@id="root"]/div[2]/div[1]/div/div[1]/div[1]/div[3]/div[2]/ul/li[76]/a').click()
 #li[76]=2023
-
 
 # 点击获取内容按钮
 driver.find_element(By.XPATH, '//*[@id="root"]/div[2]/div[1]/div/div[1]/div[2]/span/span[3]').click()
