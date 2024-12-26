@@ -1,0 +1,103 @@
+from time import sleep
+import pandas as pd
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.firefox.service import Service
+from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+# 设置 geckodriver 路径和目标网址
+geckodriver_path = '/Users/zhuyenan/Documents/python/geckodriver'
+url = 'https://data.cnki.net/valueSearch/index?ky=人均GDP指数'
+
+# 设置城市列表
+cities = ['北京市', '天津市']
+
+# 配置 Firefox 浏览器选项
+options = Options()
+options.headless = False  # 设置为 True 可启用无头模式（即不显示浏览器界面）
+service = Service(geckodriver_path)
+
+# 创建 Firefox WebDriver 实例
+driver = webdriver.Firefox(service=service, options=options)
+
+# 访问目标网址
+driver.get(url)
+sleep(5)  # 等待页面加载完成
+
+# 设置过滤条件：精确查询、起始年份、终止年份
+driver.find_element(By.XPATH, '//*[@id="root"]/div[2]/div[1]/div/div[1]/div[1]/div[1]/div/div').click()
+driver.find_element(By.XPATH, "//li/a[text()='精确']").click()
+driver.find_element(By.XPATH, '//*[@id="root"]/div[2]/div[1]/div/div[1]/div[1]/div[3]/div[1]/div').click()
+driver.find_element(By.XPATH, "//li/a[text()='2011']").click()
+driver.find_element(By.XPATH, '//*[@id="root"]/div[2]/div[1]/div/div[1]/div[1]/div[3]/div[2]/div').click()
+driver.find_element(By.XPATH, '//*[@id="root"]/div[2]/div[1]/div/div[1]/div[1]/div[3]/div[2]/ul/li[74]/a').click()
+
+# 点击获取内容按钮
+driver.find_element(By.XPATH, '//*[@id="root"]/div[2]/div[1]/div/div[1]/div[2]/span/span[3]').click()
+sleep(3)  # 等待数据加载
+
+# 创建空的 DataFrame 用于存储抓取的数据
+df_all = pd.DataFrame()
+
+# 遍历城市列表，依次抓取数据
+for city in cities:
+    # 在搜索框输入城市名
+    search_box = driver.find_element(By.XPATH, '//*[@id="root"]/div[2]/div[1]/div/div[1]/div[1]/div[2]/input')
+    search_box.clear()  # 清除之前的内容
+    search_box.send_keys(city)  # 输入当前城市名称
+    sleep(1)  # 等待输入完成
+
+    # 点击搜索按钮
+    driver.find_element(By.XPATH, '//*[@id="root"]/div[2]/div[1]/div/div[1]/div[1]/div[5]/span').click()
+    sleep(2)  # 等待搜索结果加载
+
+    # 循环获取每一页的数据
+    while True:
+        rows = []  # 每页数据存储列表
+
+        # 获取数据表格 tbody 部分
+        tbody = driver.find_element(By.CSS_SELECTOR, 'tbody.valueSearch_s-tab-tbody__3SwZ4')
+
+        # 遍历每一行数据并提取列信息
+        for tr in tbody.find_elements(By.TAG_NAME, 'tr'):
+            tds = tr.find_elements(By.TAG_NAME, 'td')
+            if tds:  # 如果该行有数据（即 td 元素数量大于0）
+                rows.append({
+                    '序号': tds[0].text.strip(),
+                    '时间': tds[1].text.strip(),
+                    '地区': tds[2].text.strip(),
+                    '指标': tds[3].text.strip(),
+                    '数值': tds[4].text.strip(),
+                    '单位': tds[5].text.strip(),
+                    '来源': tds[6].text.strip(),
+                    '页码': tds[7].text.strip(),
+                })
+
+        # 将当前页的数据添加到总 DataFrame 中
+        df_all = pd.concat([df_all, pd.DataFrame(rows)], ignore_index=True)
+        print(f"获取到 {len(rows)} 条数据")
+
+        # 滚动页面到底部，加载更多数据
+        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+
+        try:
+            # 等待并点击翻页按钮，加载下一页数据
+            next_button = WebDriverWait(driver, 10).until(
+                EC.element_to_be_clickable((By.CSS_SELECTOR, '.btn-next'))
+            )
+            next_button.click()
+            sleep(3)  # 等待页面切换
+        except Exception:
+            print("没有更多数据，结束当前城市的抓取")
+            break  # 如果没有翻页按钮，说明已经是最后一页
+
+    print(f"{city} 的数据抓取完毕")
+
+# 将抓取到的数据保存到 Excel 文件
+df_all.to_excel("/Users/zhuyenan/Downloads/GDP.xlsx", index=False)
+print('数据已保存到桌面')
+
+# 关闭浏览器
+driver.quit()
