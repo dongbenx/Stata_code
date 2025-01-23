@@ -2,8 +2,8 @@ import os
 import pandas as pd
 
 # 文件路径
-file_main = '/Users/zhuyenan/Downloads/面板.xlsx'  # 主文件路径
-data_folder = '/Users/zhuyenan/Downloads/数据'  # 数据文件夹路径
+file_main = '/Users/Downloads/面板.xlsx'  # 主文件路径
+data_folder = '/Users/Downloads/数据'  # 数据文件夹路径
 
 # 读取主文件
 df_main = pd.read_excel(file_main)
@@ -35,7 +35,7 @@ for filename in os.listdir(data_folder):
         df_main = pd.merge(df_main, df_data, on=['地区', '时间'], how='left')
 
 # 将最终结果保存到新的Excel文件
-output_file = '/Users/zhuyenan/Downloads/merged_file.xlsx'
+output_file = '/Users/Downloads/merged_file.xlsx'
 df_main.to_excel(output_file, index=False, engine='openpyxl')
 
 print(f"All merged data saved to {output_file}")
