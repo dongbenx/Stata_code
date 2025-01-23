@@ -1,2 +1,1 @@
-# cnki
-一些自用代码
+一些自用stata和python代码
