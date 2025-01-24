@@ -1,0 +1,11 @@
+*Step1：检验KMO和Bartlett
+factortest x1 x2 x3 x4 x5 x6
+
+*Step2：确定主成分个数
+pca x1 x2 x3 x4 x5 x6
+
+*Step3：计算主成分得分
+predict f1 f2
+
+*Step4：计算综合指标
+gen Score=(主成分1贡献率/累计贡献率)*f1+(主成分2贡献率/累计贡献率)*f2+(主成分3贡献率/累计贡献率)*f3
