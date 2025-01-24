@@ -1,0 +1,11 @@
+* 确保数据按 id 和 year 排序
+sort id year
+
+* 按 id 分组，计算前一年的值
+bysort id: gen credit_lag = L.credit
+
+* 按 id 分组，计算增长率
+bysort id: gen credit_growth_rate = (credit - credit_lag) / credit_lag
+
+* 移除每个 id 的第一个年份的增长率（因为没有前一年的数据）
+bysort id: replace credit_growth_rate = . if year == year[1]
