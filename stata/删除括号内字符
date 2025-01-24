@@ -1,0 +1,1 @@
+gen new_var = regexr(省份, "\（.*\）", "")
