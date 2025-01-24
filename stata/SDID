@@ -1,0 +1,9 @@
+// sdid
+sdid packspercapita state year treated, method(sdid) vce(noinference) graph g1_opt(ylabel(-110(20)50) xtitle("") scheme(sj)) g1on g2_opt(ylabel(0(25)150) ytitle("Packs per capita") scheme(sj)) 
+
+//did
+sdid packspercapita state year treated, method(did) vce(noinference) graph g1_opt(ylabel(-110(20)50) xtitle("") scheme(sj)) g1on g2_opt(ylabel(0(25)150) ytitle("Packs per capita") scheme(sj)) 
+
+//sc
+sdid packspercapita state year treated, method(sc) vce(noinference) graph g1_opt(ylabel(-110(20)50) xtitle("") scheme(sj)) g1on g2_opt(ylabel(0(25)150) ytitle("Packs per capita") scheme(sj)) 
+
